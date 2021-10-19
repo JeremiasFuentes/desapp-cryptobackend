@@ -7,7 +7,6 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="CrytoBackend" />
-        <module name="CrytoBackend" />
         <module name="CryptoBackend" />
       </profile>
     </annotationProcessing>
@@ -16,7 +15,6 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="CryptoBackend" options="-parameters" />
       <module name="CrytoBackend" options="-parameters" />
-      <module name="crud" options="-parameters" />
     </option>
   </component>
 </project>
