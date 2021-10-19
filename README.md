@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ## [unq-desapp-fuentes-diaz]
 
 Enunciado: https://docs.google.com/document/d/1B6kqVnkV2wICgwDZAw9yHenH8aJlz-_bJMzeGktzgqk/edit
@@ -20,3 +21,6 @@ All notable changes to this project will be documented in this file.
 ### Changed
 
 ### Removed
+=======
+# desapp-cryptobackend
+>>>>>>> df583577a60594b98f7834a3aa5e8dd8c067abb6
