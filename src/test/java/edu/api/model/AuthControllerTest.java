@@ -1,8 +1,6 @@
 package edu.api.model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import edu.api.model.controller.CryptoController;
-import edu.api.model.dto.Crypto;
 import edu.api.model.dto.Message;
 import edu.api.model.enums.RolName;
 import edu.api.model.security.controller.AuthController;
@@ -11,22 +9,17 @@ import edu.api.model.security.dto.LoginUser;
 import edu.api.model.security.dto.RegisterUser;
 import edu.api.model.security.entity.Rol;
 import edu.api.model.security.jwt.JwtProvider;
-import edu.api.model.security.repository.UserRepository;
 import edu.api.model.security.service.RolService;
 import edu.api.model.security.service.UserService;
-import edu.api.model.service.CryptoService;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.mockito.*;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
@@ -102,7 +95,7 @@ public class AuthControllerTest {
         Mockito.when(user.getWallet()).thenReturn("123123124343124414434");
         Mockito.when(user.getPassword()).thenReturn("asdfgh77");
 
-        ResponseEntity<?> response = authController.nuevo(user,br);
+        ResponseEntity<?> response = authController.register(user,br);
         Message msg = (Message) response.getBody();
         Assert.assertEquals(msg.getMessage(), "user created");
         Assert.assertEquals(response.getStatusCode(), HttpStatus.CREATED);
@@ -136,7 +129,7 @@ public class AuthControllerTest {
         Mockito.when(user.getWallet()).thenReturn("123123124343124414434");
         Mockito.when(user.getPassword()).thenReturn("asdfgh77");
 
-        ResponseEntity<?> response = authController.nuevo(user,br);
+        ResponseEntity<?> response = authController.register(user,br);
         Message msg = (Message) response.getBody();
         Assert.assertEquals(msg.getMessage(), "mail in use");
         Assert.assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
@@ -170,7 +163,7 @@ public class AuthControllerTest {
         Mockito.when(user.getWallet()).thenReturn("123123124343124414434");
         Mockito.when(user.getPassword()).thenReturn("asdfgh77");
 
-        ResponseEntity<?> response = authController.nuevo(user,br);
+        ResponseEntity<?> response = authController.register(user,br);
         Message msg = (Message) response.getBody();
         Assert.assertEquals(msg.getMessage(), "user name in use");
         Assert.assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);

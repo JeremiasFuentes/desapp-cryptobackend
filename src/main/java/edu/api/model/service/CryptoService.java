@@ -36,7 +36,7 @@ public class CryptoService {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
             finish.forEach(x -> x.setLastUpdate(dtf.format(LocalDateTime.now())));
             DollarPrice dolar = this.getDollarPriceNow();
-            finish.forEach(x -> x.setPrice(x.getPrice() * dolar.getV()));
+            finish.forEach(x -> x.setPrice(x.getPrice() * dolar.getSell()));
             return finish;
         }catch (HttpClientErrorException.BadRequest e){
             return null;
@@ -49,7 +49,7 @@ public class CryptoService {
                 return null;
             }
             Crypto body = active.getBody();
-            body.setPrice(body.getPrice() * this.getDollarPriceNow().getV());
+            body.setPrice(body.getPrice() * this.getDollarPriceNow().getSell());
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
             body.setLastUpdate(dtf.format(LocalDateTime.now()));
             return body;
@@ -57,12 +57,8 @@ public class CryptoService {
     }
 
     public DollarPrice getDollarPriceNow(){
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization","BEARER eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjQ0OTI5NjMsInR5cGUiOiJleHRlcm5hbCIsInVzZXIiOiJqZXJlbWlhc2Z1ZW50ZXM3N0BnbWFpbC5jb20ifQ.gHHz2GFOfB8BRJBq-vWCK4Fh4LdDfozeG-Pg9bfc4YwQr-sR1Nc-Phy3m3BBjTK1DKAVEdRAlz_pGk-UGUvHwg");
-        HttpEntity<String> entity = new HttpEntity(headers);
-        ResponseEntity<List<DollarPrice>> dollarPrices = restTemplate.exchange("https://api.estadisticasbcra.com/usd_of", HttpMethod.GET,entity, new ParameterizedTypeReference<List<DollarPrice>>() {});
-        List<DollarPrice> response = dollarPrices.getBody();
-        DollarPrice dolar = response.get(response.size()-1);
+        ResponseEntity<DollarPrice> dollarPrice = restTemplate.getForEntity("https://api-dolar-argentina.herokuapp.com/api/dolaroficial",DollarPrice.class);
+        DollarPrice dolar = dollarPrice.getBody();
         return dolar;
     }
 

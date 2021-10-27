@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -47,7 +48,7 @@ public class AuthController {
     JwtProvider jwtProvider;
 
     @PostMapping("/register")
-    public ResponseEntity<?> nuevo(@Valid @RequestBody RegisterUser registerUser, BindingResult bindingResult){
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterUser registerUser, BindingResult bindingResult){
         if(bindingResult.hasErrors())
             return new ResponseEntity(new Message("invalid mail or wrong information"), HttpStatus.BAD_REQUEST);
         if(userService.existsByUserName(registerUser.getLastName()))
@@ -76,5 +77,14 @@ public class AuthController {
         UserDetails userDetails = (UserDetails)authentication.getPrincipal();
         JwtDto jwtDto = new JwtDto(jwt, userDetails.getUsername(), userDetails.getAuthorities());
         return new ResponseEntity(jwtDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<?> getUsers(){
+        List<User> all = userService.getAll();
+        if (all == null){
+            return new ResponseEntity(new Message("Users not found"), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<List<User>>(all,HttpStatus.OK);
     }
 }

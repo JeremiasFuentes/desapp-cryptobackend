@@ -47,7 +47,7 @@ public class CryptoServiceTest {
         Crypto crypto = new Crypto("ALICEUSDT", 17.00f);
         ResponseEntity<Crypto> cryptoResponse = new ResponseEntity<>(crypto, HttpStatus.OK);
 
-        DollarPrice dp = new DollarPrice("", 1.00f);
+        DollarPrice dp = new DollarPrice("", 1.00f, 1.00f);
         List<DollarPrice> ld = new ArrayList<>();
         ld.add(dp);
         ResponseEntity<List<DollarPrice>> dollarResponse = new ResponseEntity<>(ld,HttpStatus.OK);
@@ -83,7 +83,7 @@ public class CryptoServiceTest {
 
     @Test
     public void getAllCryptsFromApiTest(){
-        DollarPrice dp = new DollarPrice("", 1.00f);
+        DollarPrice dp = new DollarPrice("", 1.00f, 1.00f);
         List<DollarPrice> ld = new ArrayList<>();
         ld.add(dp);
         ResponseEntity<List<DollarPrice>> dollarResponse = new ResponseEntity<>(ld,HttpStatus.OK);
