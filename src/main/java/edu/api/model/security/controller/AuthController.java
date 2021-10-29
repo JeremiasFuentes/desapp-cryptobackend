@@ -87,4 +87,13 @@ public class AuthController {
         }
         return new ResponseEntity<List<User>>(all,HttpStatus.OK);
     }
+
+    @GetMapping("/users/{id}")
+    public ResponseEntity<?> getUsers(@PathVariable int id){
+        User user = userService.getById(id).get();
+        if (user == null){
+            return new ResponseEntity(new Message("User not found"), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<User>(user,HttpStatus.OK);
+    }
 }
