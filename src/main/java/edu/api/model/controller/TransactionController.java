@@ -189,4 +189,24 @@ public class TransactionController {
         return new ResponseEntity<List<Publication>>(publications,HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getTransaction(@PathVariable int id){
+        if(!transactionService.existsById(id)){
+            return new ResponseEntity(new Message("Transaction dont exist"), HttpStatus.BAD_REQUEST);
+        }
+        Transaction transaction = transactionService.getByID(id).get();
+
+        return new ResponseEntity<Transaction>(transaction,HttpStatus.OK);
+    }
+
+    @GetMapping("/publication/{id}")
+    public ResponseEntity<?> getPublication(@PathVariable int id){
+        if(!publicationService.existsById(id)){
+            return new ResponseEntity(new Message("Publication dont exist"), HttpStatus.BAD_REQUEST);
+        }
+        Publication publication = publicationService.getByID(id).get();
+
+        return new ResponseEntity<Publication>(publication,HttpStatus.OK);
+    }
+
 }
