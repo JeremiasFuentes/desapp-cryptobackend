@@ -2,10 +2,10 @@
 package edu.api.model.entity;
 
 
-import edu.api.model.dto.Crypto;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import edu.api.model.security.entity.User;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
@@ -17,8 +17,8 @@ public class Transaction {
     private LocalDateTime date;
     @NotNull
     private String userNameSeller;
-    @NotBlank
-    private String userNameBuyer;
+    @ManyToOne
+    private User user;
     @NotNull
     private String cryptoName;
     @NotNull
@@ -34,6 +34,24 @@ public class Transaction {
     private boolean closed = false;
     @ManyToOne
     private Publication publication;
+    private boolean transfer = false;
+    private boolean confirm = false;
+
+    public boolean isTransfer() {
+        return transfer;
+    }
+
+    public void setTransfer(boolean transfer) {
+        this.transfer = transfer;
+    }
+
+    public boolean isConfirm() {
+        return confirm;
+    }
+
+    public void setConfirm(boolean confirm) {
+        this.confirm = confirm;
+    }
 
     public int getId() {
         return id;
@@ -67,13 +85,6 @@ public class Transaction {
         this.closed = closed;
     }
 
-    public String getUserNameBuyer() {
-        return userNameBuyer;
-    }
-
-    public void setUserNameBuyer(String userNameBuyer) {
-        this.userNameBuyer = userNameBuyer;
-    }
 
     public String getCryptoName() {
         return cryptoName;
@@ -94,10 +105,10 @@ public class Transaction {
         this.publication = publication;
     }
 
-    public Transaction(LocalDateTime date, String userNameSeller, String userNameBuyer, String cryptoName, float amountOfCrypto, float priceOfCrypto, float priceTotalInPesos, float amountOfCryptoToBuy, String type , Publication publication) {
+    public Transaction(LocalDateTime date, String userNameSeller, User user, String cryptoName, float amountOfCrypto, float priceOfCrypto, float priceTotalInPesos, float amountOfCryptoToBuy, String type , Publication publication) {
         this.date = date;
         this.type = type;
-        this.userNameBuyer = userNameBuyer;
+        this.user = user;
         this.userNameSeller = userNameSeller;
         this.cryptoName = cryptoName;
         this.amountOfCrypto = amountOfCrypto;
@@ -113,6 +124,15 @@ public class Transaction {
 
     public void setUserNameSeller(String userNameSeller) {
         this.userNameSeller = userNameSeller;
+    }
+
+    @JsonBackReference
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public float getAmountOfCrypto() {

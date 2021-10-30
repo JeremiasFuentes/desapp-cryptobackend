@@ -4,6 +4,7 @@ import edu.api.model.entity.Publication;
 import edu.api.model.entity.Transaction;
 import edu.api.model.repository.PublicationRepository;
 import edu.api.model.repository.TransactionRepository;
+import edu.api.model.security.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,12 @@ public class PublicationService {
 
     public Optional<Publication> getByID (int id){return publicationRepository.findById(id);}
 
-    public List<Publication> getByUserNameSeller (String userNam){return publicationRepository.findByUserNameSeller(userNam);}
+    public List<Publication> getAllByUser(User user){
+        return publicationRepository.findAllByUser(user);
+    }
+
+    public boolean existsById(int id){
+        return publicationRepository.existsById(id);
+    }
 
 }

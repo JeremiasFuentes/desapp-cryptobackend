@@ -1,5 +1,7 @@
 package edu.api.model.security.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import edu.api.model.entity.Publication;
 import edu.api.model.entity.Transaction;
 
 import javax.persistence.*;
@@ -37,9 +39,13 @@ public class User {
     @JoinTable(name = "user_rol", joinColumns = @JoinColumn(name = "user_id"),
     inverseJoinColumns = @JoinColumn(name = "rol_id"))
     private Set<Rol> rols = new HashSet<>();
-    @OneToMany
-    private List<Transaction> transactions = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade =CascadeType.ALL, fetch = FetchType.LAZY, targetEntity = Transaction.class)
+    private List<Transaction> transactions = new ArrayList<Transaction>();
 
+    @OneToMany(mappedBy = "user", cascade =CascadeType.ALL, fetch = FetchType.LAZY, targetEntity = Publication.class)
+    private List<Publication> publications = new ArrayList<Publication>();
+
+    @JsonManagedReference
     public List<Transaction> getTransactions() {
         return transactions;
     }
@@ -60,6 +66,15 @@ public class User {
         this.direction = direction;
         this.cvu = cvu;
         this.wallet = wallet;
+    }
+
+    @JsonManagedReference
+    public List<Publication> getPublications() {
+        return publications;
+    }
+
+    public void setPublications(List<Publication> publications) {
+        this.publications = publications;
     }
 
     public String getUserName() {
