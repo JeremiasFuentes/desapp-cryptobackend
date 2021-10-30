@@ -171,5 +171,22 @@ public class TransactionController {
         return new ResponseEntity<List<Transaction>>(HttpStatus.OK);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllTransactions(){
+        List<Transaction> transactions = transactionService.getAll();
+        if (transactions == null){
+            return new ResponseEntity(new Message("Transactions empty"), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<List<Transaction>>(transactions,HttpStatus.OK);
+    }
+
+    @GetMapping("/publications")
+    public ResponseEntity<?> getAllPublications(){
+        List<Publication> publications = publicationService.getAll();
+        if (publications == null){
+            return new ResponseEntity(new Message("Transactions empty"), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<List<Publication>>(publications,HttpStatus.OK);
+    }
 
 }
