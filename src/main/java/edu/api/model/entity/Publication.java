@@ -3,11 +3,9 @@ package edu.api.model.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import edu.api.model.security.entity.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,6 +16,8 @@ public class Publication {
     private LocalDateTime date;
     @ManyToOne
     private User user;
+    @NotNull
+    private String userName;
     @NotNull
     private String cryptoName;
     @NotNull
@@ -62,9 +62,10 @@ public class Publication {
     public Publication() {
     }
 
-    public Publication(LocalDateTime date, User user, String cryptoName, float amountOfCrypto, float priceOfCrypto, float priceTotalInPesos, String type, Float reputation) {
+    public Publication(LocalDateTime date, User user,String userName, String cryptoName, float amountOfCrypto, float priceOfCrypto, float priceTotalInPesos, String type, Float reputation) {
         this.date = date;
         this.user = user;
+        this.userName = userName;
         this.cryptoName = cryptoName;
         this.amountOfCrypto = amountOfCrypto;
         this.priceOfCrypto = priceOfCrypto;
@@ -76,6 +77,14 @@ public class Publication {
     @JsonBackReference
     public User getUser() {
         return user;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public void setUser(User user) {

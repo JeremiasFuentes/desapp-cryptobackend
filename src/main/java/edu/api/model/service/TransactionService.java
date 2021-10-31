@@ -1,9 +1,8 @@
 package edu.api.model.service;
 
-import edu.api.model.entity.Publication;
 import edu.api.model.entity.Transaction;
 import edu.api.model.repository.TransactionRepository;
-import edu.api.model.security.entity.User;
+import edu.api.model.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

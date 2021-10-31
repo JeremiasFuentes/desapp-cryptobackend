@@ -1,8 +1,7 @@
 package edu.api.model.repository;
 
-import edu.api.model.entity.Publication;
 import edu.api.model.entity.Transaction;
-import edu.api.model.security.entity.User;
+import edu.api.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

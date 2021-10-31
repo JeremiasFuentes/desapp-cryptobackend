@@ -6,8 +6,8 @@ import edu.api.model.dto.NewPublication;
 import edu.api.model.dto.NewTransaction;
 import edu.api.model.entity.Publication;
 import edu.api.model.entity.Transaction;
-import edu.api.model.security.entity.User;
-import edu.api.model.security.service.UserService;
+import edu.api.model.entity.User;
+import edu.api.model.service.UserService;
 import edu.api.model.service.CryptoService;
 import edu.api.model.service.PublicationService;
 import edu.api.model.service.TransactionService;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -38,25 +37,6 @@ public class TransactionController {
 
     @Autowired
     CryptoService cryptoService;
-
-    @PostMapping("/addP")
-    public ResponseEntity<?> newPublication(@Valid @RequestBody NewPublication newPublication, BindingResult bindingResult){
-        if(bindingResult.hasErrors())
-            return new ResponseEntity(new Message("invalid mail or wrong information"), HttpStatus.BAD_REQUEST);
-        Crypto crypto = cryptoService.getCryptFromApi(newPublication.getCryptoName());
-        User user = userService.getByUserName(newPublication.getUserName()).get();
-        Publication publication = new Publication(LocalDateTime.now(),user, newPublication.getCryptoName(), newPublication.getAmountOfCrypto(),
-                crypto.getPrice() , newPublication.getPriceTotalInPesos(), newPublication.getType(), 0.0f);
-
-        /*
-        List<Publication> publications = user.getPublications();
-        publications.add(publication);
-        user.setPublications(publications);
-        userService.save(user);
-        */
-        publicationService.save(publication);
-        return new ResponseEntity(new Message("publication created"), HttpStatus.CREATED);
-    }
 
     @PostMapping("/addT/{id}")
     public ResponseEntity<?> newTransaction(@Valid @RequestBody NewTransaction newTransaction, BindingResult bindingResult,@PathVariable int id){
@@ -81,15 +61,6 @@ public class TransactionController {
 
     }
 
-    @GetMapping("/publications/{userName}")
-    public ResponseEntity<?> getUserPublications(@PathVariable String userName){
-        User user = userService.getByUserName(userName).get();
-        List<Publication> publications = publicationService.getAllByUser(user);
-        if (publications == null){
-            return new ResponseEntity(new Message("the user not have publications"), HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<List<Publication>>(publications,HttpStatus.OK);
-    }
 
     @GetMapping("/{userName}")
     public ResponseEntity<?> getUserTransactions(@PathVariable String userName){
@@ -180,15 +151,6 @@ public class TransactionController {
         return new ResponseEntity<List<Transaction>>(transactions,HttpStatus.OK);
     }
 
-    @GetMapping("/publications")
-    public ResponseEntity<?> getAllPublications(){
-        List<Publication> publications = publicationService.getAll();
-        if (publications == null){
-            return new ResponseEntity(new Message("Transactions empty"), HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<List<Publication>>(publications,HttpStatus.OK);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<?> getTransaction(@PathVariable int id){
         if(!transactionService.existsById(id)){
@@ -197,16 +159,6 @@ public class TransactionController {
         Transaction transaction = transactionService.getByID(id).get();
 
         return new ResponseEntity<Transaction>(transaction,HttpStatus.OK);
-    }
-
-    @GetMapping("/publication/{id}")
-    public ResponseEntity<?> getPublication(@PathVariable int id){
-        if(!publicationService.existsById(id)){
-            return new ResponseEntity(new Message("Publication dont exist"), HttpStatus.BAD_REQUEST);
-        }
-        Publication publication = publicationService.getByID(id).get();
-
-        return new ResponseEntity<Publication>(publication,HttpStatus.OK);
     }
 
 }

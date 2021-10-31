@@ -1,8 +1,8 @@
 package edu.api.model.util;
 
-import edu.api.model.security.entity.Rol;
+import edu.api.model.entity.Rol;
 import edu.api.model.enums.RolName;
-import edu.api.model.security.service.RolService;
+import edu.api.model.service.RolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;

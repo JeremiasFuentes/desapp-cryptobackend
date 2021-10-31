@@ -3,7 +3,6 @@ package edu.api.model.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import edu.api.model.security.entity.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
