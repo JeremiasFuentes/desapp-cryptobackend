@@ -49,7 +49,7 @@ public class PublicationController {
     }
 
 
-    @GetMapping("/{userName}")
+    @GetMapping("/user/{userName}")
     public ResponseEntity<?> getUserPublications(@PathVariable String userName){
         User user = userService.getByUserName(userName).get();
         List<Publication> publications = publicationService.getAllByUser(user);

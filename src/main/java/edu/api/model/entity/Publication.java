@@ -18,6 +18,7 @@ public class Publication {
     private User user;
     @NotNull
     private String userName;
+
     @NotNull
     private String cryptoName;
     @NotNull
@@ -72,6 +73,14 @@ public class Publication {
         this.priceTotalInPesos = priceTotalInPesos;
         this.reputation = reputation;
         this.type = type;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @JsonBackReference
