@@ -4,6 +4,7 @@ import edu.api.model.dto.Crypto;
 import edu.api.model.dto.DollarPrice;
 import edu.api.model.enums.CryptoName;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -24,7 +25,7 @@ public class CryptoService {
     @Autowired
     RestTemplate restTemplate = new RestTemplate();
 
-
+    @Cacheable(value = "crytosCache")
     public List<Crypto> getAllCryptsFromApi(){
         try {
             ResponseEntity<List<Crypto>> all = restTemplate.exchange("https://api1.binance.com/api/v3/ticker/price", HttpMethod.GET, null, new ParameterizedTypeReference<List<Crypto>>() {});
@@ -43,6 +44,7 @@ public class CryptoService {
         }
     }
 
+    @Cacheable(value = "cryto")
     public Crypto getCryptFromApi(String name){
             ResponseEntity<Crypto> active = restTemplate.getForEntity("https://api1.binance.com/api/v3/ticker/price?symbol=" + name, Crypto.class);
             if (active.getStatusCode() == HttpStatus.BAD_REQUEST){
