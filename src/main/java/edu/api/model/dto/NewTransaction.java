@@ -8,9 +8,9 @@ public class NewTransaction {
 
 
     @NotBlank
-    private String userNameSeller;
+    private String userNamePublisher;
     @NotBlank
-    private String userNameBuyer;
+    private String userNameClient;
     @NotBlank
     private String cryptoName;
     @NotNull
@@ -20,12 +20,12 @@ public class NewTransaction {
     @NotBlank
     private String type;
 
-    public String getUserNameBuyer() {
-        return userNameBuyer;
+    public String getUserNameClient() {
+        return userNameClient;
     }
 
-    public void setUserNameBuyer(String userNameBuyer) {
-        this.userNameBuyer = userNameBuyer;
+    public void setUserNameClient(String userNameClient) {
+        this.userNameClient = userNameClient;
     }
 
 
@@ -38,12 +38,12 @@ public class NewTransaction {
         this.type = type;
     }
 
-    public String getUserNameSeller() {
-        return userNameSeller;
+    public String getUserNamePublisher() {
+        return userNamePublisher;
     }
 
-    public void setUserNameSeller(String userNameSeller) {
-        this.userNameSeller = userNameSeller;
+    public void setUserNamePublisher(String userNamePublisher) {
+        this.userNamePublisher = userNamePublisher;
     }
 
     public String getCryptoName() {

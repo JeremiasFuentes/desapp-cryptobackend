@@ -42,7 +42,7 @@ public class PublicationController {
         Crypto crypto = cryptoService.getCryptFromApi(newPublication.getCryptoName());
         User user = userService.getByUserName(newPublication.getUserName()).get();
         Publication publication = new Publication(LocalDateTime.now(),user,newPublication.getUserName(), newPublication.getCryptoName(), newPublication.getAmountOfCrypto(),
-                crypto.getPrice() , newPublication.getPriceTotalInPesos(), newPublication.getType(), 0.0f);
+                crypto.getPrice() , newPublication.getPriceTotalInPesos(), newPublication.getType(), user.getReputation());
 
         publicationService.save(publication);
         return new ResponseEntity(new Message("publication created"), HttpStatus.CREATED);

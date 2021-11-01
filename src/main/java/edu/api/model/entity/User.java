@@ -42,6 +42,33 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade =CascadeType.ALL, fetch = FetchType.LAZY, targetEntity = Publication.class)
     private List<Publication> publications = new ArrayList<Publication>();
+    private float reputation = 0;
+    private int cantTrxFinished = 0;
+    private int points = 0;
+
+    public float getReputation() {
+        return this.reputation;
+    }
+
+    public void setReputation(float reputation) {
+        this.reputation = reputation;
+    }
+
+    public int getCantTrxFinished() {
+        return cantTrxFinished;
+    }
+
+    public void setCantTrxFinished(int cantTrxFinished) {
+        this.cantTrxFinished = cantTrxFinished;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
 
     @JsonManagedReference
     public List<Transaction> getTransactions() {
@@ -153,5 +180,13 @@ public class User {
 
     public void setRols(Set<Rol> roles) {
         this.rols = roles;
+    }
+
+    public void recalculateReputation() {
+        if(this.cantTrxFinished == 0){
+            this.reputation = 0;
+        }else{
+            this.reputation = this.points / this.cantTrxFinished;
+        }
     }
 }

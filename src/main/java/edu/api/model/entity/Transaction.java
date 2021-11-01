@@ -15,7 +15,7 @@ public class Transaction {
     private int id;
     private LocalDateTime date;
     @NotNull
-    private String userNameSeller;
+    private String userNamePublisher;
     @ManyToOne
     private User user;
     @NotNull
@@ -104,11 +104,11 @@ public class Transaction {
         this.publication = publication;
     }
 
-    public Transaction(LocalDateTime date, String userNameSeller, User user, String cryptoName, float amountOfCrypto, float priceOfCrypto, float priceTotalInPesos, float amountOfCryptoToBuy, String type , Publication publication) {
+    public Transaction(LocalDateTime date, String userNamePublisher, User user, String cryptoName, float amountOfCrypto, float priceOfCrypto, float priceTotalInPesos, float amountOfCryptoToBuy, String type , Publication publication) {
         this.date = date;
         this.type = type;
         this.user = user;
-        this.userNameSeller = userNameSeller;
+        this.userNamePublisher = userNamePublisher;
         this.cryptoName = cryptoName;
         this.amountOfCrypto = amountOfCrypto;
         this.priceOfCrypto = priceOfCrypto;
@@ -117,12 +117,12 @@ public class Transaction {
         this.publication = publication;
     }
 
-    public String getUserNameSeller() {
-        return userNameSeller;
+    public String getUserNamePublisher() {
+        return userNamePublisher;
     }
 
-    public void setUserNameSeller(String userNameSeller) {
-        this.userNameSeller = userNameSeller;
+    public void setUserNamePublisher(String userNamePublisher) {
+        this.userNamePublisher = userNamePublisher;
     }
 
     @JsonBackReference
