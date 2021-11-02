@@ -25,7 +25,7 @@ public class CryptoService {
     @Autowired
     RestTemplate restTemplate = new RestTemplate();
 
-    @Cacheable(value = "crytosCache")
+    @Cacheable(value = "cryptosCache")
     public List<Crypto> getAllCryptsFromApi(){
         try {
             ResponseEntity<List<Crypto>> all = restTemplate.exchange("https://api1.binance.com/api/v3/ticker/price", HttpMethod.GET, null, new ParameterizedTypeReference<List<Crypto>>() {});
@@ -44,7 +44,7 @@ public class CryptoService {
         }
     }
 
-    @Cacheable(value = "cryto")
+    @Cacheable(value = "crypto")
     public Crypto getCryptFromApi(String name){
             ResponseEntity<Crypto> active = restTemplate.getForEntity("https://api1.binance.com/api/v3/ticker/price?symbol=" + name, Crypto.class);
             if (active.getStatusCode() == HttpStatus.BAD_REQUEST){
@@ -58,6 +58,7 @@ public class CryptoService {
 
     }
 
+    @Cacheable(value = "dollar")
     public DollarPrice getDollarPriceNow(){
         ResponseEntity<DollarPrice> dollarPrice = restTemplate.getForEntity("https://api-dolar-argentina.herokuapp.com/api/dolaroficial",DollarPrice.class);
         DollarPrice dolar = dollarPrice.getBody();

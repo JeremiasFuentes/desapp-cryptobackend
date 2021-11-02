@@ -1,6 +1,8 @@
 package edu.api.model.dto;
 
-public class Crypto {
+import java.io.Serializable;
+
+public class Crypto implements Serializable {
     String symbol;
     Float price;
     String lastUpdate;
