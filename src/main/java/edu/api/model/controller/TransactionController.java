@@ -44,19 +44,19 @@ public class TransactionController {
             return new ResponseEntity(new Message("invalid mail or wrong information"), HttpStatus.BAD_REQUEST);
         Crypto crypto = cryptoService.getCryptFromApi(newTransaction.getCryptoName());
         Publication publication = publicationService.getByID(id).get();
-        User user = userService.getByUserName(newTransaction.getUserNamePublisher()).get();
-        User user2 = userService.getByUserName(newTransaction.getUserNameClient()).get();
-        Transaction transaction = new Transaction(LocalDateTime.now(), newTransaction.getUserNamePublisher(),user2,newTransaction.getCryptoName(),
-                crypto.getPrice(),publication.getAmountOfCrypto() , publication.getPriceTotalInPesos(), newTransaction.getAmountOfCrypto(), newTransaction.getType(), publication);
-        publication.setAmountOfCrypto(publication.getAmountOfCrypto() - transaction.getAmountOfCryptoToBuy());
-        publicationService.save(publication);
+        User userPublisher = userService.getByUserName(newTransaction.getUserNamePublisher()).get();
+        User userClient = userService.getByUserName(newTransaction.getUserNameClient()).get();
+        Transaction transaction = new Transaction(LocalDateTime.now(), newTransaction.getUserNamePublisher(), userPublisher, userClient, newTransaction.getCryptoName(),
+                crypto.getPrice(), publication.getAmountOfCrypto(), publication.getPriceTotalInPesos(), newTransaction.getAmountOfCrypto(), newTransaction.getType(), publication);
+        //publication.setAmountOfCrypto(publication.getAmountOfCrypto() - transaction.getAmountOfCryptoToBuy());
+        //publicationService.save(publication);
         transactionService.save(transaction);
         if(newTransaction.getType() == "compra"){
 
-            return new ResponseEntity(new Message(user.getWallet()), HttpStatus.CREATED);
+            return new ResponseEntity(new Message(userPublisher.getWallet()), HttpStatus.CREATED);
         }else{
 
-            return new ResponseEntity(new Message(user.getCvu()), HttpStatus.CREATED);
+            return new ResponseEntity(new Message(userPublisher.getCvu()), HttpStatus.CREATED);
         }
 
     }
@@ -92,8 +92,8 @@ public class TransactionController {
     }
 
     private void calculateClose(Transaction transaction) {
-        User user = userService.getByUserName(transaction.getUserNamePublisher()).get();
-        User user2 = userService.getByUserName(transaction.getUser().getUserName()).get();
+        User user = transaction.getUserPublisher();
+        User user2 = transaction.getUserClient();
         if(TimeUnit.MILLISECONDS.toMinutes(LocalDateTime.now().compareTo(transaction.getDate())) <= 30){
             user.setPoints(user.getPoints() + 10);
             user2.setPoints(user2.getPoints() + 10);

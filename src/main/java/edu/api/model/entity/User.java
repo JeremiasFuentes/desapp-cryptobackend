@@ -37,8 +37,11 @@ public class User {
     @JoinTable(name = "user_rol", joinColumns = @JoinColumn(name = "user_id"),
     inverseJoinColumns = @JoinColumn(name = "rol_id"))
     private Set<Rol> rols = new HashSet<>();
-    @OneToMany(mappedBy = "user", cascade =CascadeType.ALL, fetch = FetchType.LAZY, targetEntity = Transaction.class)
-    private List<Transaction> transactions = new ArrayList<Transaction>();
+
+    @OneToMany(mappedBy = "userPublisher", cascade =CascadeType.ALL, fetch = FetchType.LAZY, targetEntity = Transaction.class)
+    private List<Transaction> transactionsPublisher = new ArrayList<Transaction>();
+    @OneToMany(mappedBy = "userClient", cascade =CascadeType.ALL, fetch = FetchType.LAZY, targetEntity = Transaction.class)
+    private List<Transaction> transactionsClient = new ArrayList<Transaction>();
 
     @OneToMany(mappedBy = "user", cascade =CascadeType.ALL, fetch = FetchType.LAZY, targetEntity = Publication.class)
     private List<Publication> publications = new ArrayList<Publication>();
@@ -71,12 +74,21 @@ public class User {
     }
 
     @JsonManagedReference
-    public List<Transaction> getTransactions() {
-        return transactions;
+    public List<Transaction> getTransactionsPublisher() {
+        return transactionsPublisher;
+    }
+
+    public void setTransactionsPublisher(List<Transaction> transactions) {
+        this.transactionsPublisher = transactions;
+    }
+
+    @JsonManagedReference
+    public List<Transaction> getTransactionsClient() {
+        return transactionsClient;
     }
 
     public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
+        this.transactionsClient = transactions;
     }
 
     public User() {

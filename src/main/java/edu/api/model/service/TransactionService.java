@@ -29,7 +29,6 @@ public class TransactionService {
         return transactionRepository.findAll();
     }
 
-
     public Optional<Transaction> getByID (int id){return transactionRepository.findById(id);}
 
     public List<Transaction> getAllByUser(User user){
