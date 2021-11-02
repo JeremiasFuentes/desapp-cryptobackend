@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("auth/publication")
@@ -79,6 +80,22 @@ public class PublicationController {
         Publication publication = publicationService.getByID(id).get();
 
         return new ResponseEntity<Publication>(publication,HttpStatus.OK);
+    }
+
+    @PostMapping("/{userName}/cancelPublication/{id}")
+    public ResponseEntity<?> cancelTransaction(@PathVariable String userName,@PathVariable int id){
+
+        if(!publicationService.existsById(id)){
+            return new ResponseEntity(new Message("Transaction dont exist"), HttpStatus.BAD_REQUEST);
+        }
+        Publication publication = publicationService.getByID(id).get();
+        String publisher = publication.getUser().getUserName();
+        if(!Objects.equals(publisher, userName)){
+            return new ResponseEntity(new Message("This publication is not yours to delete"), HttpStatus.BAD_REQUEST);
+        }
+        publicationService.delete(publication);
+
+        return new ResponseEntity<List<Transaction>>(HttpStatus.OK);
     }
 
 }

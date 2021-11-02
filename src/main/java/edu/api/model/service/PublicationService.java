@@ -21,6 +21,10 @@ public class PublicationService {
         publicationRepository.save(publication);
     }
 
+    public void delete(Publication publication){
+        publicationRepository.delete(publication);
+    }
+
     public List<Publication> getAll(){
         return publicationRepository.findAll();
     }
