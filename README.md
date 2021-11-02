@@ -8,19 +8,21 @@ All notable changes to this project will be documented in this file.
 
 ## [ON DEVELOP]
 
-## [1.0.0] - 2021-10-05
+## Entrega 2 [1.0.0] - 2021-11-02
 ### Added
-- Login & Register pages.
-- Double register verification.
-- JWT security.
-- Log Out.
-- Two visual identity for errors in the forms by [@tylerfortune8](https://github.com/diazmatu).
-- Navigation bar.
-- Configured comunication with Crypto's last currency.
+- Transaction and publication entities with repositories, services and controller.
+- embedded cache with redis.
+- swagger config.
+- dtos for posts and gets methods.
+
 
 ### Changed
 
-### Removed
+- relations and variables in User
+
+### KNOWN ISSUES
+
+- Transactions dont have all the information from users implicaded
 =======
 # desapp-cryptobackend
 >>>>>>> df583577a60594b98f7834a3aa5e8dd8c067abb6
