@@ -1,4 +1,4 @@
-package edu.api.model;
+package edu.api.model.unitTest;
 
 import edu.api.model.entity.User;
 import edu.api.model.repository.UserRepository;

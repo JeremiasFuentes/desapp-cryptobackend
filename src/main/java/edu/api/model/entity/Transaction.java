@@ -14,10 +14,12 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private LocalDateTime date;
-    @NotNull
-    private String userNamePublisher;
     @ManyToOne
-    private User user;
+    @JoinColumn(name="userPublisher")
+    private User userPublisher;
+    @ManyToOne
+    @JoinColumn(name="userClient")
+    private User userClient;
     @NotNull
     private String cryptoName;
     @NotNull
@@ -104,11 +106,11 @@ public class Transaction {
         this.publication = publication;
     }
 
-    public Transaction(LocalDateTime date, String userNamePublisher, User user, String cryptoName, float amountOfCrypto, float priceOfCrypto, float priceTotalInPesos, float amountOfCryptoToBuy, String type , Publication publication) {
+    public Transaction(LocalDateTime date, User userPublisher, User userClient, String cryptoName, float amountOfCrypto, float priceOfCrypto, float priceTotalInPesos, float amountOfCryptoToBuy, String type , Publication publication) {
         this.date = date;
         this.type = type;
-        this.user = user;
-        this.userNamePublisher = userNamePublisher;
+        this.userPublisher = userPublisher;
+        this.userClient = userClient;
         this.cryptoName = cryptoName;
         this.amountOfCrypto = amountOfCrypto;
         this.priceOfCrypto = priceOfCrypto;
@@ -117,21 +119,22 @@ public class Transaction {
         this.publication = publication;
     }
 
-    public String getUserNamePublisher() {
-        return userNamePublisher;
+    @JsonBackReference
+    public User getUserPublisher() {
+        return userPublisher;
     }
 
-    public void setUserNamePublisher(String userNamePublisher) {
-        this.userNamePublisher = userNamePublisher;
+    public void setUserPublisher(User userPublisher) {
+        this.userPublisher = userPublisher;
     }
 
     @JsonBackReference
-    public User getUser() {
-        return user;
+    public User getUserClient() {
+        return userClient;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserClient(User userClient) {
+        this.userClient = userClient;
     }
 
     public float getAmountOfCrypto() {

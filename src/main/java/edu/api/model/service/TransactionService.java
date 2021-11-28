@@ -32,8 +32,12 @@ public class TransactionService {
 
     public Optional<Transaction> getByID (int id){return transactionRepository.findById(id);}
 
-    public List<Transaction> getAllByUser(User user){
-        return transactionRepository.findAllByUser(user);
+    public List<Transaction> getAllByUserPublisher(User user){
+        return transactionRepository.findAllByUserPublisher(user);
+    }
+
+    public List<Transaction> getAllByUserClient(User user){
+        return transactionRepository.findAllByUserClient(user);
     }
 
     public boolean existsById(int id){

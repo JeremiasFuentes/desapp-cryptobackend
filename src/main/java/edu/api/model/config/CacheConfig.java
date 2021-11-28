@@ -1,4 +1,4 @@
-package edu.api.model.util;
+package edu.api.model.config;
 
 import jdk.nashorn.internal.objects.annotations.Setter;
 import org.springframework.beans.factory.annotation.Value;

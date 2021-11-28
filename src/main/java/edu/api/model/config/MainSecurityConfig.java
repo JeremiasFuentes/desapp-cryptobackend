@@ -1,8 +1,8 @@
-package edu.api.model.util;
+package edu.api.model.config;
 
 import edu.api.model.jwt.JwtEntryPoint;
 import edu.api.model.jwt.JwtTokenFilter;
-import edu.api.model.service.UserDetailsServiceImpl;
+import edu.api.model.service.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,10 +21,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class MainSecurity extends WebSecurityConfigurerAdapter {
+public class MainSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    UserDetailsServiceImpl userDetailsService;
+    UserDetailsService userDetailsService;
 
     @Autowired
     JwtEntryPoint jwtEntryPoint;

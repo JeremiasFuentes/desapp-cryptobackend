@@ -45,4 +45,13 @@ public class CryptoController {
         }
         return new ResponseEntity<Crypto>(active, HttpStatus.OK);
     }
+
+    @GetMapping(value = "/dollar")
+    public ResponseEntity<?> getDollarNow() throws JsonProcessingException {
+        DollarPrice dollar = cryptoService.getDollarPriceNow();
+        if(dollar == null){
+            return new ResponseEntity(new Message("URL not found"),HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<DollarPrice>(dollar, HttpStatus.OK);
+    }
 }

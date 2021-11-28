@@ -1,4 +1,4 @@
-package edu.api.model;
+package edu.api.model.unitTest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import edu.api.model.dto.Message;

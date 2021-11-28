@@ -1,15 +1,14 @@
 package edu.api.model.service;
 
 import edu.api.model.entity.User;
-import edu.api.model.entity.PrimaryUser;
+import edu.api.model.dto.PrimaryUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
 
     @Autowired
     UserService userService;

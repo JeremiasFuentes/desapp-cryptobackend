@@ -18,8 +18,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("auth/transaction")
@@ -46,7 +49,7 @@ public class TransactionController {
         Publication publication = publicationService.getByID(id).get();
         User user = userService.getByUserName(newTransaction.getUserNamePublisher()).get();
         User user2 = userService.getByUserName(newTransaction.getUserNameClient()).get();
-        Transaction transaction = new Transaction(LocalDateTime.now(), newTransaction.getUserNamePublisher(),user2,newTransaction.getCryptoName(),
+        Transaction transaction = new Transaction(LocalDateTime.now(), user,user2,newTransaction.getCryptoName(),
                 crypto.getPrice(),publication.getAmountOfCrypto() , publication.getPriceTotalInPesos(), newTransaction.getAmountOfCrypto(), newTransaction.getType(), publication);
         publication.setAmountOfCrypto(publication.getAmountOfCrypto() - transaction.getAmountOfCryptoToBuy());
         publicationService.save(publication);
@@ -65,11 +68,14 @@ public class TransactionController {
     @GetMapping("/{userName}/all")
     public ResponseEntity<?> getUserTransactions(@PathVariable String userName){
         User user = userService.getByUserName(userName).get();
-        List<Transaction> transactions = transactionService.getAllByUser(user);
-        if (transactions == null){
+        List<Transaction> transactions = transactionService.getAllByUserPublisher(user);
+        List<Transaction> transactions2 = transactionService.getAllByUserClient(user);
+        List<Transaction> newList = new ArrayList<Transaction>(transactions);
+        newList.addAll(transactions2);
+        if (newList == null){
             return new ResponseEntity(new Message("the user not have transactions"), HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<List<Transaction>>(transactions,HttpStatus.OK);
+        return new ResponseEntity<List<Transaction>>(newList,HttpStatus.OK);
     }
 
     @PostMapping("/{userName}/confirmReception/{id}")
@@ -92,8 +98,8 @@ public class TransactionController {
     }
 
     private void calculateClose(Transaction transaction) {
-        User user = userService.getByUserName(transaction.getUserNamePublisher()).get();
-        User user2 = userService.getByUserName(transaction.getUser().getUserName()).get();
+        User user = transaction.getUserPublisher();
+        User user2 = transaction.getUserClient();
         if(TimeUnit.MILLISECONDS.toMinutes(LocalDateTime.now().compareTo(transaction.getDate())) <= 30){
             user.setPoints(user.getPoints() + 10);
             user2.setPoints(user2.getPoints() + 10);

@@ -1,6 +1,6 @@
 package edu.api.model.jwt;
 
-import edu.api.model.service.UserDetailsServiceImpl;
+import edu.api.model.service.UserDetailsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     JwtProvider jwtProvider;
 
     @Autowired
-    UserDetailsServiceImpl userDetailsService;
+    UserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {

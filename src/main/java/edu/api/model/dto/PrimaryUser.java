@@ -1,5 +1,6 @@
-package edu.api.model.entity;
+package edu.api.model.dto;
 
+import edu.api.model.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -7,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 public class PrimaryUser implements UserDetails {
     private String name;

@@ -1,4 +1,4 @@
-package edu.api.model.util;
+package edu.api.model.config;
 
 import org.assertj.core.util.Lists;
 import org.springframework.context.annotation.Bean;

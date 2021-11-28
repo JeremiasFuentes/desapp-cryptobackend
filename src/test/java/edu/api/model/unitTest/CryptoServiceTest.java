@@ -1,4 +1,4 @@
-package edu.api.model;
+package edu.api.model.unitTest;
 
 import edu.api.model.dto.Crypto;
 import edu.api.model.dto.DollarPrice;

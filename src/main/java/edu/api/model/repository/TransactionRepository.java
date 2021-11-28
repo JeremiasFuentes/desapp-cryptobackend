@@ -12,6 +12,7 @@ import java.util.Optional;
 public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
     List<Transaction> findAll();
     Optional<Transaction> findById(int id);
-    List<Transaction> findAllByUser(User user);
+    List<Transaction> findAllByUserPublisher(User user);
+    List<Transaction> findAllByUserClient(User user);
     boolean existsById(int id);
 }

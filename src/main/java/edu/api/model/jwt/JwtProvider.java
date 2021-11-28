@@ -1,6 +1,6 @@
 package edu.api.model.jwt;
 
-import edu.api.model.entity.PrimaryUser;
+import edu.api.model.dto.PrimaryUser;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
