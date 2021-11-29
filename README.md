@@ -8,21 +8,15 @@ All notable changes to this project will be documented in this file.
 
 ## [ON DEVELOP]
 
-## Entrega 2 [1.0.0] - 2021-11-02
+## Entrega 3 [1.0.0] - 2021-11-29
 ### Added
-- Transaction and publication entities with repositories, services and controller.
-- embedded cache with redis.
-- swagger config.
-- dtos for posts and gets methods.
-
-
-### Changed
-
-- relations and variables in User
+- Log with log4j.
+- arch tests.
+- validations in entitys and controllers.
 
 ### KNOWN ISSUES
 
-- Transactions dont have all the information from users implicaded
+- Execution time calculated manually on controllers
 =======
 # desapp-cryptobackend
 >>>>>>> df583577a60594b98f7834a3aa5e8dd8c067abb6
