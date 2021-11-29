@@ -105,7 +105,7 @@ public class AuthController {
             return new ResponseEntity(new Message("Users not found"), HttpStatus.BAD_REQUEST);
         }
         long elapsedTimeMillis = System.currentTimeMillis()-start;
-        log.info("Get uses success in " + elapsedTimeMillis + " ms");
+        log.info("Get users success in " + elapsedTimeMillis + " ms");
         return new ResponseEntity<List<User>>(all,HttpStatus.OK);
     }
 
