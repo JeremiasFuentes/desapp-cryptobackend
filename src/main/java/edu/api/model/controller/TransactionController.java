@@ -10,6 +10,7 @@ import edu.api.model.service.UserService;
 import edu.api.model.service.CryptoService;
 import edu.api.model.service.PublicationService;
 import edu.api.model.service.TransactionService;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,7 @@ import java.util.stream.Stream;
 @RestController
 @RequestMapping("auth/transaction")
 @CrossOrigin
+@Log4j2
 public class TransactionController {
 
     @Autowired
@@ -43,10 +45,17 @@ public class TransactionController {
 
     @PostMapping("/addT/{id}")
     public ResponseEntity<?> newTransaction(@Valid @RequestBody NewTransaction newTransaction, BindingResult bindingResult,@PathVariable int id){
-        if(bindingResult.hasErrors())
+        long start = System.currentTimeMillis();
+        if(bindingResult.hasErrors()) {
+            log.error("invalid mail or wrong information");
             return new ResponseEntity(new Message("invalid mail or wrong information"), HttpStatus.BAD_REQUEST);
+        }
         Crypto crypto = cryptoService.getCryptFromApi(newTransaction.getCryptoName());
         Publication publication = publicationService.getByID(id).get();
+        if(publication.getAmountOfCrypto() < newTransaction.getAmountOfCrypto()){
+            log.error("amount higher than the transaction");
+            return new ResponseEntity(new Message("amount higher than the transaction"), HttpStatus.BAD_REQUEST);
+        }
         User user = userService.getByUserName(newTransaction.getUserNamePublisher()).get();
         User user2 = userService.getByUserName(newTransaction.getUserNameClient()).get();
         Transaction transaction = new Transaction(LocalDateTime.now(), user,user2,newTransaction.getCryptoName(),
@@ -54,6 +63,8 @@ public class TransactionController {
         publication.setAmountOfCrypto(publication.getAmountOfCrypto() - transaction.getAmountOfCryptoToBuy());
         publicationService.save(publication);
         transactionService.save(transaction);
+        long elapsedTimeMillis = System.currentTimeMillis()-start;
+        log.info("Transiction created in " +elapsedTimeMillis+ " ms");
         if(newTransaction.getType() == "compra"){
 
             return new ResponseEntity(new Message(user.getWallet()), HttpStatus.CREATED);
@@ -67,25 +78,32 @@ public class TransactionController {
 
     @GetMapping("/{userName}/all")
     public ResponseEntity<?> getUserTransactions(@PathVariable String userName){
+        long start = System.currentTimeMillis();
         User user = userService.getByUserName(userName).get();
         List<Transaction> transactions = transactionService.getAllByUserPublisher(user);
         List<Transaction> transactions2 = transactionService.getAllByUserClient(user);
         List<Transaction> newList = new ArrayList<Transaction>(transactions);
         newList.addAll(transactions2);
         if (newList == null){
+            log.info("the user not have transactions");
             return new ResponseEntity(new Message("the user not have transactions"), HttpStatus.BAD_REQUEST);
         }
+        long elapsedTimeMillis = System.currentTimeMillis()-start;
+        log.info("Transictions returns in " +elapsedTimeMillis+ " ms");
         return new ResponseEntity<List<Transaction>>(newList,HttpStatus.OK);
     }
 
     @PostMapping("/{userName}/confirmReception/{id}")
     public ResponseEntity<?> confirmReceptionTransaction(@PathVariable String userName,@PathVariable int id){
+        long start = System.currentTimeMillis();
         if(!transactionService.existsById(id)){
+            log.error("Transaction dont exist");
             return new ResponseEntity(new Message("Transactions dont exist"), HttpStatus.BAD_REQUEST);
         }
         Transaction transaction = transactionService.getByID(id).get();
         if(transaction.isClosed()){
-            return new ResponseEntity(new Message("Transactions closed"), HttpStatus.BAD_REQUEST);
+            log.error("Transaction Closed");
+            return new ResponseEntity(new Message("Transaction closed"), HttpStatus.BAD_REQUEST);
         }
         transaction.setConfirm(true);
         if (transaction.isConfirm() && transaction.isTransfer()) {
@@ -94,10 +112,13 @@ public class TransactionController {
 
         }
         transactionService.save(transaction);
+        long elapsedTimeMillis = System.currentTimeMillis()-start;
+        log.info("Confirm reception of Transaction in " +elapsedTimeMillis + " ms");
         return new ResponseEntity<List<Transaction>>(HttpStatus.OK);
     }
 
     private void calculateClose(Transaction transaction) {
+        long start = System.currentTimeMillis();
         User user = transaction.getUserPublisher();
         User user2 = transaction.getUserClient();
         if(TimeUnit.MILLISECONDS.toMinutes(LocalDateTime.now().compareTo(transaction.getDate())) <= 30){
@@ -113,15 +134,20 @@ public class TransactionController {
         user2.recalculateReputation();
         userService.save(user);
         userService.save(user2);
+        long elapsedTimeMillis = System.currentTimeMillis()-start;
+        log.info("Transaction Closed in "+elapsedTimeMillis+ " ms");
     }
 
     @PostMapping("/{userName}/confirmTransaction/{id}")
     public ResponseEntity<?> confirmTransaction(@PathVariable String userName,@PathVariable int id){
+        long start = System.currentTimeMillis();
         if(!transactionService.existsById(id)){
-            return new ResponseEntity(new Message("Transactions dont exist"), HttpStatus.BAD_REQUEST);
+            log.error("Transaction dont exist");
+            return new ResponseEntity(new Message("Transaction dont exist"), HttpStatus.BAD_REQUEST);
         }
         Transaction transaction = transactionService.getByID(id).get();
         if(transaction.isClosed()){
+            log.error("Transaction Closed");
             return new ResponseEntity(new Message("Transaction closed"), HttpStatus.BAD_REQUEST);
         }
         transaction.setTransfer(true);
@@ -130,17 +156,21 @@ public class TransactionController {
             this.calculateClose(transaction);
         }
         transactionService.save(transaction);
+        long elapsedTimeMillis = System.currentTimeMillis()-start;
+        log.info("Confirm Transaction in " + elapsedTimeMillis+" ms");
         return new ResponseEntity<List<Transaction>>(HttpStatus.OK);
     }
 
     @PostMapping("/{userName}/cancelTransaction/{id}")
     public ResponseEntity<?> cancelTransaction(@PathVariable String userName,@PathVariable int id){
-
+        long start = System.currentTimeMillis();
         if(!transactionService.existsById(id)){
+            log.error("Transaction dont exist");
             return new ResponseEntity(new Message("Transaction dont exist"), HttpStatus.BAD_REQUEST);
         }
         Transaction transaction = transactionService.getByID(id).get();
         if(transaction.isClosed()){
+            log.error("Transaction Closed");
             return new ResponseEntity(new Message("Transaction closed"), HttpStatus.BAD_REQUEST);
         }
         User user = userService.getByUserName(userName).get();
@@ -152,25 +182,34 @@ public class TransactionController {
         user.recalculateReputation();
         userService.save(user);
         transactionService.delete(transaction);
+        long elapsedTimeMillis = System.currentTimeMillis()-start;
+        log.info("Transaction Canceled in "+elapsedTimeMillis+" ms");
         return new ResponseEntity<List<Transaction>>(HttpStatus.OK);
     }
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllTransactions(){
+        long start = System.currentTimeMillis();
         List<Transaction> transactions = transactionService.getAll();
         if (transactions == null){
+            log.info("Transactions empty");
             return new ResponseEntity(new Message("Transactions empty"), HttpStatus.BAD_REQUEST);
         }
+        long elapsedTimeMillis = System.currentTimeMillis()-start;
+        log.info("Transactions return in "+elapsedTimeMillis+" ms");
         return new ResponseEntity<List<Transaction>>(transactions,HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getTransaction(@PathVariable int id){
+        long start = System.currentTimeMillis();
         if(!transactionService.existsById(id)){
+            log.error("Transaction dont exist");
             return new ResponseEntity(new Message("Transaction dont exist"), HttpStatus.BAD_REQUEST);
         }
         Transaction transaction = transactionService.getByID(id).get();
-
+        long elapsedTimeMillis = System.currentTimeMillis()-start;
+        log.info("Transaction returned in "+elapsedTimeMillis+" ms" );
         return new ResponseEntity<Transaction>(transaction,HttpStatus.OK);
     }
 

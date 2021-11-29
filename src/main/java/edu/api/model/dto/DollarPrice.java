@@ -3,7 +3,9 @@ package edu.api.model.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class DollarPrice {
+import java.io.Serializable;
+
+public class DollarPrice implements Serializable {
     @JsonProperty("fecha")
     private String date;
     @JsonProperty("compra")
