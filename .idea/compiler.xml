@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="CrytoBackend" />
         <module name="CryptoBackend" />
+        <module name="crud" />
       </profile>
     </annotationProcessing>
   </component>

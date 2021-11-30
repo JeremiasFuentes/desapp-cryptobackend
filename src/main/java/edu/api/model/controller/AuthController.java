@@ -50,7 +50,7 @@ public class AuthController {
     JwtProvider jwtProvider;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody RegisterUser registerUser, BindingResult bindingResult){
+    public ResponseEntity<JwtDto> register(@Valid @RequestBody RegisterUser registerUser, BindingResult bindingResult){
         long start = System.currentTimeMillis();
         if(bindingResult.hasErrors()) {
             log.error("invalid mail or wrong information");
@@ -68,14 +68,19 @@ public class AuthController {
                 new User(registerUser.getName(), registerUser.getLastName(),registerUser.getUserName(), registerUser.getEmail(),passwordEncoder.encode(registerUser.getPassword()),registerUser.getDirection(),registerUser.getCvu(),registerUser.getWallet());
         Set<Rol> roles = new HashSet<>();
         roles.add(rolService.getByRolName(RolName.ROLE_USER).get());
-        if(registerUser.getRols().contains("admin")) {
+        if(registerUser.getRols().contains("admin"))
             roles.add(rolService.getByRolName(RolName.ROLE_ADMIN).get());
-        }
         user.setRols(roles);
         userService.save(user);
         long elapsedTimeMillis = System.currentTimeMillis()-start;
         log.info("user created in " + elapsedTimeMillis + " ms");
-        return new ResponseEntity(new Message("user created"), HttpStatus.CREATED);
+        Authentication authentication =
+                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(registerUser.getUserName(), registerUser.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtProvider.generateToken(authentication);
+        UserDetails userDetails = (UserDetails)authentication.getPrincipal();
+        JwtDto jwtDto = new JwtDto(jwt, userDetails.getUsername(), userDetails.getAuthorities());
+        return new ResponseEntity(jwtDto, HttpStatus.OK);
     }
 
     @PostMapping("/login")
