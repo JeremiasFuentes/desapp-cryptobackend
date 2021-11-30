@@ -114,10 +114,10 @@ public class AuthController {
         return new ResponseEntity<List<User>>(all,HttpStatus.OK);
     }
 
-    @GetMapping("/auth/users/{id}")
-    public ResponseEntity<?> getUsers(@PathVariable int id){
+    @GetMapping("/auth/users/{username}")
+    public ResponseEntity<?> getUsers(@PathVariable("username") String username){
         long start = System.currentTimeMillis();
-        User user = userService.getById(id).get();
+        User user = userService.getByUserName(username).get();
         if (user == null){
             log.error("User not found");
             return new ResponseEntity(new Message("User not found"), HttpStatus.BAD_REQUEST);

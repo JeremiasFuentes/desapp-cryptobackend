@@ -22,8 +22,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("auth/transaction")
@@ -60,8 +58,8 @@ public class TransactionController {
         User user2 = userService.getByUserName(newTransaction.getUserNameClient()).get();
         Transaction transaction = new Transaction(LocalDateTime.now(), user,user2,newTransaction.getCryptoName(),
                 crypto.getPrice(),publication.getAmountOfCrypto() , publication.getPriceTotalInPesos(), newTransaction.getAmountOfCrypto(), newTransaction.getType(), publication);
-        publication.setAmountOfCrypto(publication.getAmountOfCrypto() - transaction.getAmountOfCryptoToBuy());
-        publicationService.save(publication);
+        //publication.setAmountOfCrypto(publication.getAmountOfCrypto() - transaction.getAmountOfCryptoToBuy());
+        //publicationService.save(publication);
         transactionService.save(transaction);
         long elapsedTimeMillis = System.currentTimeMillis()-start;
         log.info("Transiction created in " +elapsedTimeMillis+ " ms");
